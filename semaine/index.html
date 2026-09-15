@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Planning de visites — superviseur réseau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+:root{
+  --ground:#FBF9F2; --card:#FFFFFF; --ink:#1F2726; --muted:#68716E;
+  --line:#E6E1D0; --accent:#0F7E7D; --accent-soft:#DFF1EF;
+  --or:#A5791A; --or-soft:#F6ECD1;
+  --amber:#A5791A; --amber-soft:#F6ECD1;
+  --blue:#33647F; --blue-soft:#E2ECF2;
+  --green2:#2E7D52; --green2-soft:#E1EFE5;
+  --teal:#0F7E7D; --teal-soft:#DCF0EE; --backdrop:rgba(31,39,38,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#101817; --card:#18211F; --ink:#E8E5DA; --muted:#96A09C;
+    --line:#2E3B38; --accent:#4FC2B8; --accent-soft:#1C3431;
+    --or:#D9B24A; --or-soft:#3A3117;
+    --amber:#D9B24A; --amber-soft:#3A3117;
+    --blue:#7FAECB; --blue-soft:#22313C;
+    --green2:#7BC79A; --green2-soft:#20342A;
+    --teal:#4FC2B8; --teal-soft:#1C3431; --backdrop:rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101817; --card:#18211F; --ink:#E8E5DA; --muted:#96A09C;
+  --line:#2E3B38; --accent:#4FC2B8; --accent-soft:#1C3431;
+  --or:#D9B24A; --or-soft:#3A3117;
+  --amber:#D9B24A; --amber-soft:#3A3117;
+  --blue:#7FAECB; --blue-soft:#22313C;
+  --green2:#7BC79A; --green2-soft:#20342A;
+  --teal:#4FC2B8; --teal-soft:#1C3431; --backdrop:rgba(0,0,0,.6);
+}
+body{background:var(--ground); color:var(--ink); margin:0;
+  font-family:"Public Sans",system-ui,sans-serif; line-height:1.55;
+  padding:2.5rem 1.25rem 4rem;}
+main{max-width:66rem; margin:0 auto}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif; text-wrap:balance; margin:0}
+h1{font-size:clamp(1.9rem,4vw,2.6rem); font-weight:650; letter-spacing:-.01em}
+.sub{color:var(--muted); margin:.4rem 0 0; max-width:46rem}
+.eyebrow{text-transform:uppercase; letter-spacing:.14em; font-size:.72rem;
+  font-weight:700; color:var(--or); margin:0 0 .35rem}
+header{margin-bottom:1.8rem; padding-bottom:1.4rem; border-bottom:2px solid var(--or)}
+.regles{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; padding:0; list-style:none}
+.regles li{font-size:.8rem; font-weight:600; padding:.28rem .7rem; border-radius:99px;
+  background:var(--accent-soft); color:var(--accent)}
+.grille{display:grid; grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
+  gap:1.1rem; margin-top:1.6rem}
+.semaine{background:var(--card); border:1px solid var(--line); border-radius:10px;
+  padding:1.1rem 1.2rem 1.25rem; display:flex; flex-direction:column; gap:.75rem}
+.semaine h2{font-size:1.15rem; font-weight:650}
+.semaine.courante{border-color:var(--or); border-width:2px}
+.publique .semaine{display:none}
+.publique .semaine.visible{display:flex; border-top:3px solid var(--or);
+  border-radius:12px; box-shadow:0 1px 2px rgba(31,39,38,.04), 0 8px 24px rgba(31,39,38,.06)}
+.badge-courante{font-size:.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.1em; color:var(--or)}
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+td{padding:.34rem .3rem; border-bottom:1px dashed var(--line); font-size:.88rem;
+  vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td.jour{color:var(--muted); width:5.2rem; font-weight:500}
+td.date{color:var(--muted); width:3.4rem}
+tr.auj td{background:var(--accent-soft)}
+tr.auj td.jour{color:var(--accent); font-weight:700}
+tr.auj td.jour::before, .row.auj td.jour::before{content:""; display:inline-block;
+  width:6px; height:6px; border-radius:50%; background:var(--or);
+  margin-right:.45rem; vertical-align:.12rem}
+.chip{display:inline-block; font-size:.8rem; font-weight:600; padding:.18rem .7rem;
+  border-radius:999px}
+.t1{background:var(--teal-soft); color:var(--teal)}
+.t2{background:var(--green2-soft); color:var(--green2)}
+.tg{background:var(--amber-soft); color:var(--amber)}
+.ke{background:var(--blue-soft); color:var(--blue)}
+.bu{color:var(--muted); font-size:.82rem; font-style:italic}
+footer{margin-top:2.2rem; color:var(--muted); font-size:.82rem;
+  border-top:1px solid var(--line); padding-top:1rem}
+</style></head><body>
+<main class="publique">
+<header>
+  <p class="eyebrow">Koulway · superviseur réseau · 24 août → 18 octobre 2026</p>
+  <h1>Planning de visites</h1>
+  <p class="sub">Une visite de restaurant chaque jour ouvré. Lundi : Kénitra ·
+  mardi : Tanger · vendredi : repos · jeudi : visite + demi-journée bureau.</p>
+</header>
+<section class="grille" style="grid-template-columns:minmax(0,28rem)">
+  <article class="semaine" data-du="2026-08-24"
+    data-au="2026-08-30">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 24 août</h2></div>
+    <table><tr data-date="2026-08-24"><td class="jour">Lundi</td><td class="date">24/08</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-08-25"><td class="jour">Mardi</td><td class="date">25/08</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-08-26"><td class="jour">Mercredi</td><td class="date">26/08</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-08-27"><td class="jour">Jeudi</td><td class="date">27/08</td><td><span class="chip tg">Tanger</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-08-28"><td class="jour">Vendredi</td><td class="date">28/08</td><td class="bu">repos</td></tr><tr data-date="2026-08-29"><td class="jour">Samedi</td><td class="date">29/08</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-08-30"><td class="jour">Dimanche</td><td class="date">30/08</td><td><span class="chip tg">Tanger</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-08-31"
+    data-au="2026-09-06">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 31 août</h2></div>
+    <table><tr data-date="2026-08-31"><td class="jour">Lundi</td><td class="date">31/08</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-09-01"><td class="jour">Mardi</td><td class="date">01/09</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-09-02"><td class="jour">Mercredi</td><td class="date">02/09</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-09-03"><td class="jour">Jeudi</td><td class="date">03/09</td><td><span class="chip t2">Taboula</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-09-04"><td class="jour">Vendredi</td><td class="date">04/09</td><td class="bu">repos</td></tr><tr data-date="2026-09-05"><td class="jour">Samedi</td><td class="date">05/09</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-09-06"><td class="jour">Dimanche</td><td class="date">06/09</td><td><span class="chip ke">Kénitra</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-09-07"
+    data-au="2026-09-13">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 7 septembre</h2></div>
+    <table><tr data-date="2026-09-07"><td class="jour">Lundi</td><td class="date">07/09</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-09-08"><td class="jour">Mardi</td><td class="date">08/09</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-09-09"><td class="jour">Mercredi</td><td class="date">09/09</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-09-10"><td class="jour">Jeudi</td><td class="date">10/09</td><td><span class="chip tg">Tanger</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-09-11"><td class="jour">Vendredi</td><td class="date">11/09</td><td class="bu">repos</td></tr><tr data-date="2026-09-12"><td class="jour">Samedi</td><td class="date">12/09</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-09-13"><td class="jour">Dimanche</td><td class="date">13/09</td><td><span class="chip tg">Tanger</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-09-14"
+    data-au="2026-09-20">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 14 septembre</h2></div>
+    <table><tr data-date="2026-09-14"><td class="jour">Lundi</td><td class="date">14/09</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-09-15"><td class="jour">Mardi</td><td class="date">15/09</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-09-16"><td class="jour">Mercredi</td><td class="date">16/09</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-09-17"><td class="jour">Jeudi</td><td class="date">17/09</td><td><span class="chip t1">FAR</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-09-18"><td class="jour">Vendredi</td><td class="date">18/09</td><td class="bu">repos</td></tr><tr data-date="2026-09-19"><td class="jour">Samedi</td><td class="date">19/09</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-09-20"><td class="jour">Dimanche</td><td class="date">20/09</td><td><span class="chip t2">Taboula</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-09-21"
+    data-au="2026-09-27">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 21 septembre</h2></div>
+    <table><tr data-date="2026-09-21"><td class="jour">Lundi</td><td class="date">21/09</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-09-22"><td class="jour">Mardi</td><td class="date">22/09</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-09-23"><td class="jour">Mercredi</td><td class="date">23/09</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-09-24"><td class="jour">Jeudi</td><td class="date">24/09</td><td><span class="chip t2">Taboula</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-09-25"><td class="jour">Vendredi</td><td class="date">25/09</td><td class="bu">repos</td></tr><tr data-date="2026-09-26"><td class="jour">Samedi</td><td class="date">26/09</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-09-27"><td class="jour">Dimanche</td><td class="date">27/09</td><td><span class="chip t1">FAR</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-09-28"
+    data-au="2026-10-04">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 28 septembre</h2></div>
+    <table><tr data-date="2026-09-28"><td class="jour">Lundi</td><td class="date">28/09</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-09-29"><td class="jour">Mardi</td><td class="date">29/09</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-09-30"><td class="jour">Mercredi</td><td class="date">30/09</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-10-01"><td class="jour">Jeudi</td><td class="date">01/10</td><td><span class="chip t1">FAR</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-10-02"><td class="jour">Vendredi</td><td class="date">02/10</td><td class="bu">repos</td></tr><tr data-date="2026-10-03"><td class="jour">Samedi</td><td class="date">03/10</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-10-04"><td class="jour">Dimanche</td><td class="date">04/10</td><td><span class="chip t2">Taboula</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-10-05"
+    data-au="2026-10-11">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 5 octobre</h2></div>
+    <table><tr data-date="2026-10-05"><td class="jour">Lundi</td><td class="date">05/10</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-10-06"><td class="jour">Mardi</td><td class="date">06/10</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-10-07"><td class="jour">Mercredi</td><td class="date">07/10</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-10-08"><td class="jour">Jeudi</td><td class="date">08/10</td><td><span class="chip t2">Taboula</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-10-09"><td class="jour">Vendredi</td><td class="date">09/10</td><td class="bu">repos</td></tr><tr data-date="2026-10-10"><td class="jour">Samedi</td><td class="date">10/10</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-10-11"><td class="jour">Dimanche</td><td class="date">11/10</td><td><span class="chip t1">FAR</span></td></tr></table>
+  </article>
+  <article class="semaine" data-du="2026-10-12"
+    data-au="2026-10-18">
+    <div><span class="badge-courante" hidden>Semaine en cours</span>
+    <h2>Semaine du 12 octobre</h2></div>
+    <table><tr data-date="2026-10-12"><td class="jour">Lundi</td><td class="date">12/10</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-10-13"><td class="jour">Mardi</td><td class="date">13/10</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-10-14"><td class="jour">Mercredi</td><td class="date">14/10</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-10-15"><td class="jour">Jeudi</td><td class="date">15/10</td><td><span class="chip t1">FAR</span> <span class="bu">+ bureau</span></td></tr><tr data-date="2026-10-16"><td class="jour">Vendredi</td><td class="date">16/10</td><td class="bu">repos</td></tr><tr data-date="2026-10-17"><td class="jour">Samedi</td><td class="date">17/10</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-10-18"><td class="jour">Dimanche</td><td class="date">18/10</td><td><span class="chip t2">Taboula</span></td></tr></table>
+  </article>
+</section>
+<footer>Document généré automatiquement — seule la semaine en cours est
+affichée ; elle change chaque lundi. Le jour courant est surligné.</footer>
+</main>
+<script>
+(function(){
+  var d = new Date();
+  var iso = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") +
+            "-" + String(d.getDate()).padStart(2,"0");
+  var cartes = Array.prototype.slice.call(document.querySelectorAll(".semaine"));
+  var courante = cartes.filter(function(a){ return a.dataset.du <= iso && iso <= a.dataset.au; })[0];
+  if (!courante) courante = cartes.filter(function(a){ return a.dataset.du > iso; })[0];
+  if (!courante) courante = cartes[cartes.length - 1];
+  if (courante){
+    courante.classList.add("courante", "visible");
+    var b = courante.querySelector(".badge-courante");
+    if (b) b.hidden = false;
+  }
+  var ligne = document.querySelector('tr[data-date="' + iso + '"]');
+  if (ligne) ligne.classList.add("auj");
+})();
+</script>
+</body></html>
