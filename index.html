@@ -2,36 +2,39 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Planning de visites — animateur réseau</title>
+<title>Planning de visites — superviseur réseau</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Public+Sans:wght@400;500;600;700&display=swap">
 <style>
 *{box-sizing:border-box}
 :root{
-  --ground:#FAF9F5; --card:#FFFFFF; --ink:#20261F; --muted:#6C7268;
-  --line:#E4E2D8; --accent:#1D6E5A; --accent-soft:#E3EFE9;
-  --amber:#9A6A1B; --amber-soft:#F5EAD3;
-  --blue:#3D5A80; --blue-soft:#E1E8F0;
-  --green2:#4A6B2A; --green2-soft:#E8EED9;
-  --teal:#1D6E5A; --teal-soft:#DDEDE6; --backdrop:rgba(32,38,31,.45);
+  --ground:#FBF9F2; --card:#FFFFFF; --ink:#1F2726; --muted:#68716E;
+  --line:#E6E1D0; --accent:#0F7E7D; --accent-soft:#DFF1EF;
+  --or:#A5791A; --or-soft:#F6ECD1;
+  --amber:#A5791A; --amber-soft:#F6ECD1;
+  --blue:#33647F; --blue-soft:#E2ECF2;
+  --green2:#2E7D52; --green2-soft:#E1EFE5;
+  --teal:#0F7E7D; --teal-soft:#DCF0EE; --backdrop:rgba(31,39,38,.45);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#161A17; --card:#1E241F; --ink:#E7E5DC; --muted:#9AA096;
-    --line:#333B34; --accent:#4FB394; --accent-soft:#24382F;
-    --amber:#DFAE55; --amber-soft:#3A3020;
-    --blue:#8FB0D6; --blue-soft:#232D3A;
-    --green2:#A9C97A; --green2-soft:#2A331F;
-    --teal:#4FB394; --teal-soft:#213730; --backdrop:rgba(0,0,0,.6);
+    --ground:#101817; --card:#18211F; --ink:#E8E5DA; --muted:#96A09C;
+    --line:#2E3B38; --accent:#4FC2B8; --accent-soft:#1C3431;
+    --or:#D9B24A; --or-soft:#3A3117;
+    --amber:#D9B24A; --amber-soft:#3A3117;
+    --blue:#7FAECB; --blue-soft:#22313C;
+    --green2:#7BC79A; --green2-soft:#20342A;
+    --teal:#4FC2B8; --teal-soft:#1C3431; --backdrop:rgba(0,0,0,.6);
   }
 }
 :root[data-theme="dark"]{
-  --ground:#161A17; --card:#1E241F; --ink:#E7E5DC; --muted:#9AA096;
-  --line:#333B34; --accent:#4FB394; --accent-soft:#24382F;
-  --amber:#DFAE55; --amber-soft:#3A3020;
-  --blue:#8FB0D6; --blue-soft:#232D3A;
-  --green2:#A9C97A; --green2-soft:#2A331F;
-  --teal:#4FB394; --teal-soft:#213730; --backdrop:rgba(0,0,0,.6);
+  --ground:#101817; --card:#18211F; --ink:#E8E5DA; --muted:#96A09C;
+  --line:#2E3B38; --accent:#4FC2B8; --accent-soft:#1C3431;
+  --or:#D9B24A; --or-soft:#3A3117;
+  --amber:#D9B24A; --amber-soft:#3A3117;
+  --blue:#7FAECB; --blue-soft:#22313C;
+  --green2:#7BC79A; --green2-soft:#20342A;
+  --teal:#4FC2B8; --teal-soft:#1C3431; --backdrop:rgba(0,0,0,.6);
 }
 body{background:var(--ground); color:var(--ink); margin:0;
   font-family:"Public Sans",system-ui,sans-serif; line-height:1.55;
@@ -41,8 +44,8 @@ h1,h2,h3{font-family:"Fraunces",Georgia,serif; text-wrap:balance; margin:0}
 h1{font-size:clamp(1.9rem,4vw,2.6rem); font-weight:650; letter-spacing:-.01em}
 .sub{color:var(--muted); margin:.4rem 0 0; max-width:46rem}
 .eyebrow{text-transform:uppercase; letter-spacing:.14em; font-size:.72rem;
-  font-weight:700; color:var(--accent); margin:0 0 .35rem}
-header{margin-bottom:1.8rem; padding-bottom:1.4rem; border-bottom:2px solid var(--accent)}
+  font-weight:700; color:var(--or); margin:0 0 .35rem}
+header{margin-bottom:1.8rem; padding-bottom:1.4rem; border-bottom:2px solid var(--or)}
 .regles{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; padding:0; list-style:none}
 .regles li{font-size:.8rem; font-weight:600; padding:.28rem .7rem; border-radius:99px;
   background:var(--accent-soft); color:var(--accent)}
@@ -51,9 +54,11 @@ header{margin-bottom:1.8rem; padding-bottom:1.4rem; border-bottom:2px solid var(
 .semaine{background:var(--card); border:1px solid var(--line); border-radius:10px;
   padding:1.1rem 1.2rem 1.25rem; display:flex; flex-direction:column; gap:.75rem}
 .semaine h2{font-size:1.15rem; font-weight:650}
-.semaine.courante{border-color:var(--accent); border-width:2px}
+.semaine.courante{border-color:var(--or); border-width:2px}
+.publique .semaine{display:none}
+.publique .semaine.visible{display:flex}
 .badge-courante{font-size:.7rem; font-weight:700; text-transform:uppercase;
-  letter-spacing:.1em; color:var(--accent)}
+  letter-spacing:.1em; color:var(--or)}
 table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
 td{padding:.34rem .3rem; border-bottom:1px dashed var(--line); font-size:.88rem;
   vertical-align:middle}
@@ -72,14 +77,14 @@ tr.auj td.jour{color:var(--accent); font-weight:700}
 footer{margin-top:2.2rem; color:var(--muted); font-size:.82rem;
   border-top:1px solid var(--line); padding-top:1rem}
 </style></head><body>
-<main>
+<main class="publique">
 <header>
-  <p class="eyebrow">Koulway · animateur réseau · 24 août → 18 octobre 2026</p>
+  <p class="eyebrow">Koulway · superviseur réseau · 24 août → 18 octobre 2026</p>
   <h1>Planning de visites</h1>
   <p class="sub">Une visite de restaurant chaque jour ouvré. Lundi : Kénitra ·
   mardi : Tanger · vendredi : repos · jeudi : visite + demi-journée bureau.</p>
 </header>
-<section class="grille">
+<section class="grille" style="grid-template-columns:minmax(0,28rem)">
   <article class="semaine" data-du="2026-08-24"
     data-au="2026-08-30">
     <div><span class="badge-courante" hidden>Semaine en cours</span>
@@ -129,21 +134,23 @@ footer{margin-top:2.2rem; color:var(--muted); font-size:.82rem;
     <table><tr data-date="2026-10-12"><td class="jour">Lundi</td><td class="date">12/10</td><td><span class="chip ke">Kénitra</span></td></tr><tr data-date="2026-10-13"><td class="jour">Mardi</td><td class="date">13/10</td><td><span class="chip tg">Tanger</span></td></tr><tr data-date="2026-10-14"><td class="jour">Mercredi</td><td class="date">14/10</td><td><span class="chip t2">Taboula</span></td></tr><tr data-date="2026-10-15"><td class="jour">Jeudi</td><td class="date">15/10</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-10-16"><td class="jour">Vendredi</td><td class="date">16/10</td><td class="bu">repos</td></tr><tr data-date="2026-10-17"><td class="jour">Samedi</td><td class="date">17/10</td><td><span class="chip t1">FAR</span></td></tr><tr data-date="2026-10-18"><td class="jour">Dimanche</td><td class="date">18/10</td><td><span class="chip t2">Taboula</span></td></tr></table>
   </article>
 </section>
-<footer>Document généré automatiquement — la semaine en cours est encadrée,
-le jour courant surligné.</footer>
+<footer>Document généré automatiquement — seule la semaine en cours est
+affichée ; elle change chaque lundi. Le jour courant est surligné.</footer>
 </main>
 <script>
 (function(){
   var d = new Date();
   var iso = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") +
             "-" + String(d.getDate()).padStart(2,"0");
-  document.querySelectorAll(".semaine").forEach(function(a){
-    if (a.dataset.du <= iso && iso <= a.dataset.au){
-      a.classList.add("courante");
-      var b = a.querySelector(".badge-courante");
-      if (b) b.hidden = false;
-    }
-  });
+  var cartes = Array.prototype.slice.call(document.querySelectorAll(".semaine"));
+  var courante = cartes.filter(function(a){ return a.dataset.du <= iso && iso <= a.dataset.au; })[0];
+  if (!courante) courante = cartes.filter(function(a){ return a.dataset.du > iso; })[0];
+  if (!courante) courante = cartes[cartes.length - 1];
+  if (courante){
+    courante.classList.add("courante", "visible");
+    var b = courante.querySelector(".badge-courante");
+    if (b) b.hidden = false;
+  }
   var ligne = document.querySelector('tr[data-date="' + iso + '"]');
   if (ligne) ligne.classList.add("auj");
 })();
